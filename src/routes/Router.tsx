@@ -1,6 +1,7 @@
 import React, { lazy } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Routes, Route } from "react-router-dom";
 import Loadable from "../components/loadable/Loadable";
+import NotesPage from "../components/NotesPage";
 
 const Layout = Loadable(lazy(() => import("../components/layout/Layout")));
 const Dashboard = Loadable(lazy(() => import("../views/dashboard/Dashboard")));
@@ -10,19 +11,20 @@ const Notfound = Loadable(
   lazy(() => import("../components/errorboundary/404"))
 );
 
-const Router = [
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      { path: "/", element: <Navigate to="/dashboard" /> },
-      { path: "/dashboard", exact: true, element: <Dashboard /> },
-      { path: "/sell", exact: true, element: <Sell /> },
-      { path: "/login", exact: true, element: <Login /> },
-      { path: "/auth/404", exact: true, element: <Notfound /> },
-      { path: "*", element: <Navigate to="/auth/404" /> }
-    ]
-  }
-];
+const Router: React.FC = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<NotesPage />} />
+        <Route path="/notes" element={<NotesPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/sell" element={<Sell />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/auth/404" element={<Notfound />} />
+        <Route path="*" element={<Navigate to="/auth/404" />} />
+      </Route>
+    </Routes>
+  );
+};
 
 export default Router;

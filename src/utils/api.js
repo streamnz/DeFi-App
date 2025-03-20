@@ -5,33 +5,52 @@ import { BASE_URL } from "../config/config";
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json" // Set your desired headers
-  }
+    "Content-Type": "application/json", // Set your desired headers
+  },
 });
 
 const axiosFormdataInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "multipart/form-data" // Set your desired headers
-  }
+    "Content-Type": "multipart/form-data", // Set your desired headers
+  },
 });
 
 const api = {
   get: async (url, params = {}) => {
     try {
       const response = await axiosInstance.get(url, { params });
-      return response.data;
+      return response;
     } catch (error) {
-      throw error.response.data;
+      console.error("API Error:", error);
+      throw error;
     }
   },
   post: async (url, data = {}) => {
     try {
       const response = await axiosInstance.post(url, data);
-      return response.data;
+      return response;
     } catch (error) {
-      console.log(error);
-      throw error.response.data;
+      console.error("API Error:", error);
+      throw error;
+    }
+  },
+  put: async (url, data = {}) => {
+    try {
+      const response = await axiosInstance.put(url, data);
+      return response;
+    } catch (error) {
+      console.error("API Error:", error);
+      throw error;
+    }
+  },
+  delete: async (url) => {
+    try {
+      const response = await axiosInstance.delete(url);
+      return response;
+    } catch (error) {
+      console.error("API Error:", error);
+      throw error;
     }
   },
   formPost: async (url, data) => {
@@ -39,10 +58,10 @@ const api = {
       const token = getCookie("token");
       axiosFormdataInstance.defaults.headers.common["x-auth-token"] = token;
       const response = await axiosFormdataInstance.post(url, data);
-      return response.data;
+      return response;
     } catch (error) {
-      console.log(error);
-      throw error.response.data;
+      console.error("API Error:", error);
+      throw error;
     }
   },
   authPost: async (url, data) => {
@@ -50,13 +69,12 @@ const api = {
       const token = getCookie("token");
       axiosInstance.defaults.headers.common["x-auth-token"] = token;
       const response = await axiosInstance.post(url, data);
-      return response.data;
+      return response;
     } catch (error) {
-      console.log(error);
-      throw error.response.data;
+      console.error("API Error:", error);
+      throw error;
     }
-  }
-  // Add functions for other HTTP methods (PUT, DELETE) as needed
+  },
 };
 
 export default api;
